@@ -1,19 +1,17 @@
 package com.fastcampus.baseballmanagement.team.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Team {
 
-    private int id;
+    private int teamId;
     private int stadiumId;
     private String name;
     private LocalDateTime createdAt;
