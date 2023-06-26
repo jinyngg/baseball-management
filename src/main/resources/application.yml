@@ -1,0 +1,23 @@
+
+spring:
+#  datasource:
+#    url: jdbc:mysql://localhost:3306/${urlname}?serverTimezone=UTC&charsetEncoding=UTF-8
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    username: username
+#    password: password
+
+  datasource:
+    url: jdbc:h2:mem:test
+    username: sa
+    password:
+    driverClassName: org.h2.Driver
+  h2:
+    console:
+      enabled: true
+
+#  jpa:
+#    generate-ddl: true
+#    hibernate:
+#      ddl-auto: create-drop
+#    show-sql: true
+#    database: mysql
