@@ -1,10 +1,10 @@
 
 spring:
 #  datasource:
-#    url: jdbc:mysql://localhost:3306/${urlname}?serverTimezone=UTC&charsetEncoding=UTF-8
+#    url: jdbc:mysql://localhost:3306/baseball?serverTimezone=UTC&charsetEncoding=UTF-8
 #    driver-class-name: com.mysql.cj.jdbc.Driver
-#    username: username
-#    password: password
+#    username: root
+#    password: 1q2w3e4r!@
 
   datasource:
     url: jdbc:h2:mem:test
@@ -14,6 +14,19 @@ spring:
   h2:
     console:
       enabled: true
+
+  sql:
+    init:
+      schema-locations:
+        - classpath:db/table.sql
+      data-locations:
+        - classpath:db/data.sql
+
+mybatis:
+  mapper-locations:
+    - mapper/**.xml
+  configuration:
+    map-underscore-to-camel-case: true
 
 #  jpa:
 #    generate-ddl: true
