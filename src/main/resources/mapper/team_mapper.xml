@@ -5,13 +5,13 @@
 
 <mapper namespace="com.fastcampus.baseballmanagement.team.service.impl.TeamDAO">
 
-    <insert id="insert" parameterType="com.fastcampus.baseballmanagement.team.dto.Team" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.fastcampus.baseballmanagement.team.dto.Team" useGeneratedKeys="true" keyProperty="team_id">
         INSERT INTO team (name, created_at)
         VALUES (#{name}, now())
     </insert>
 
     <select id="findAll" resultType="com.fastcampus.baseballmanagement.team.dto.Team">
-        SELECT id, stadium_id, name, created_at
+        SELECT team_id, stadium_id, name, created_at
         FROM team
     </select>
 
