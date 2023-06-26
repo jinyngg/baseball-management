@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 -- STADIUM 생성문
 
 -- TEAM 생성문
@@ -10,3 +11,10 @@ CREATE TABLE team (
 );
 
 -- PLAYER 생성문
+=======
+create table stadium(
+    id int primary key auto_increment,
+    name varchar(20) not null,
+    created_at TIMESTAMP not null
+);
+>>>>>>> ebce833735e7d8ad45fe9da69a09d2d665f1bc65

@@ -14,6 +14,17 @@ spring:
   h2:
     console:
       enabled: true
+  sql:
+    init:
+      schema-locations:
+        - classpath:db/table.sql
+      data-locations:
+        - classpath:db/data.sql
+mybatis:
+  mapper-locations:
+    - mapper/**.xml
+  configuration:
+    map-underscore-to-camel-case: true
 
   sql:
     init:
