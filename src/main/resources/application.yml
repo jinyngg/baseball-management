@@ -20,28 +20,9 @@ spring:
         - classpath:db/table.sql
       data-locations:
         - classpath:db/data.sql
-mybatis:
-  mapper-locations:
-    - mapper/**.xml
-  configuration:
-    map-underscore-to-camel-case: true
-
-  sql:
-    init:
-      schema-locations:
-        - classpath:db/table.sql
-      data-locations:
-        - classpath:db/data.sql
 
 mybatis:
   mapper-locations:
-    - mapper/**.xml
+    - mapper/*_mapper.xml
   configuration:
     map-underscore-to-camel-case: true
-
-#  jpa:
-#    generate-ddl: true
-#    hibernate:
-#      ddl-auto: create-drop
-#    show-sql: true
-#    database: mysql
