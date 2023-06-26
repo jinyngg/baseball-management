@@ -1,4 +1,9 @@
 -- STADIUM 생성문
+create table stadium(
+                        stadium_id int primary key auto_increment,
+                        name varchar(20) not null,
+                        created_at TIMESTAMP not null
+);
 
 -- TEAM 생성문
 CREATE TABLE team (
@@ -6,14 +11,7 @@ CREATE TABLE team (
                       stadium_id INT,
                       name VARCHAR(100),
                       created_at TIMESTAMP,
-                      FOREIGN KEY (stadium_id) REFERENCES stadiums(id)
+                      FOREIGN KEY (stadium_id) REFERENCES stadium(stadium_id)
 );
 
 -- PLAYER 생성문
-=======
-create table stadium(
-    id int primary key auto_increment,
-    name varchar(20) not null,
-    created_at TIMESTAMP not null
-);
->>>>>>> ebce833735e7d8ad45fe9da69a09d2d665f1bc65
