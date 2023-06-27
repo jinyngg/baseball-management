@@ -12,4 +12,9 @@ public class CustomResponse<T> {
     private String message;
     private T data;
 
+    public String toString() {
+        return "message = " + message + "\n" +
+                "data = " + String.valueOf(data) + "\n";
+    }
+
 }
