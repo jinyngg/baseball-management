@@ -1,7 +1,7 @@
 package com.fastcampus.baseballmanagement.team.service.impl;
 
 import com.fastcampus.baseballmanagement.config.DBConnection;
-import com.fastcampus.baseballmanagement.team.dto.Team;
+import com.fastcampus.baseballmanagement.team.dto.TeamList;
 import com.fastcampus.baseballmanagement.team.dto.TeamRegistration;
 
 import java.sql.*;
@@ -26,6 +26,12 @@ public class TeamDAO {
                     " team_id, stadium_id, name, created_at" +
                     " FROM team"
             ;
+
+    private final String selectTeamListQuery =
+            "SELECT" +
+                    " t.team_id, t.stadium_id, t.name AS team_name, s.name AS stadium_name, t.created_at" +
+                    " FROM team t" +
+                    " JOIN stadium s ON t.stadium_id = s.stadium_id";
 
     private static TeamDAO teamDAO;
 
@@ -72,35 +78,42 @@ public class TeamDAO {
     }
 
     /** 전체 팀 목록 */
-    public List<Team> getAllTeams() {
-        List<Team> teams = new ArrayList<>();
+    public TeamList getTeamList() {
+        TeamList teamList;
+        List<TeamList.Team> teamArrayList = new ArrayList<>();
 
         try {
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(selectAllQuery);
+            ResultSet resultSet = statement.executeQuery(selectTeamListQuery);
 
             while (resultSet.next()) {
                 int teamId = resultSet.getInt("team_id");
                 int stadiumId = resultSet.getInt("stadium_id");
-                String name = resultSet.getString("name");
+                String teamName = resultSet.getString("team_name");
+                String stadiumName = resultSet.getString("stadium_name");
                 String createdAt = resultSet.getString("created_at");
 
-                Team team = Team.builder()
+                TeamList.Team team = TeamList.Team.builder()
                         .teamId(teamId)
                         .stadiumId(stadiumId)
-                        .name(name)
+                        .teamName(teamName)
+                        .stadiumName(stadiumName)
                         .createdAt(Timestamp.valueOf(createdAt))
                         .build();
 
-                teams.add(team);
+                teamArrayList.add(team);
             }
+
+            teamList = new TeamList("팀 조회에 성공했습니다.", teamArrayList);
 
             resultSet.close();
             statement.close();
         } catch (SQLException e) {
+            teamList = new TeamList("팀 조회에 실패했습니다.", teamArrayList);
             e.printStackTrace();
         }
 
-        return teams;
+        return teamList;
     }
+
 }
