@@ -8,7 +8,7 @@ import java.util.List;
 public interface TeamService {
 
     // 팀 등록
-    TeamRegistration.Response registerTeam(TeamRegistration.Request request);
+    TeamRegistration registerTeam(String name, int stadiumId);
 
     // 팀 목록 조회
     List<Team> getTeamList();
