@@ -1,13 +1,11 @@
 package com.fastcampus.baseballmanagement.stadium.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.sql.Timestamp;
 
 @Getter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
