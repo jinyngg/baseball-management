@@ -1,6 +1,7 @@
 package com.fastcampus.baseballmanagement.team.service.impl;
 
 import com.fastcampus.baseballmanagement.team.dto.Team;
+import com.fastcampus.baseballmanagement.team.dto.TeamRegistration;
 import com.fastcampus.baseballmanagement.team.service.TeamService;
 
 import java.util.List;
@@ -14,13 +15,14 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public int registerTeam(String name, int stadiumId) {
-        teamDAO.registerTeam(name, stadiumId);
-        return stadiumId;
+    public TeamRegistration.Response registerTeam(TeamRegistration.Request request) {
+        TeamRegistration.Response response = teamDAO.registerTeam(request);
+        return response;
     }
 
     @Override
     public List<Team> getTeamList() {
-        return null;
+        List<Team> teams = teamDAO.getAllTeams();
+        return teams;
     }
 }

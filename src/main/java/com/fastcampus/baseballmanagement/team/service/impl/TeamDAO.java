@@ -1,10 +1,12 @@
 package com.fastcampus.baseballmanagement.team.service.impl;
 
 import com.fastcampus.baseballmanagement.config.DBConnection;
+import com.fastcampus.baseballmanagement.team.dto.Team;
+import com.fastcampus.baseballmanagement.team.dto.TeamRegistration;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TeamDAO {
 
@@ -43,7 +45,13 @@ public class TeamDAO {
         return teamDAO;
     }
 
-    public void registerTeam(String name, int stadiumId)  {
+    /** 팀 등록 */
+    public TeamRegistration.Response registerTeam(TeamRegistration.Request request)  {
+        String name = request.getName();
+        int stadiumId = request.getStadiumId();
+
+        TeamRegistration.Response response = null;
+
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(insertQuery);
 
@@ -53,12 +61,49 @@ public class TeamDAO {
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected > 0) {
                 System.out.println("팀 등록 성공 : " + name);
+                response = new TeamRegistration.Response("팀 등록에 성공했습니다.", null);
             } else {
                 System.out.println("팀 등록 실패");
+                response = new TeamRegistration.Response("팀 등록에 실패했습니다.", null);
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        return response;
+    }
+
+    /** 전체 팀 목록 */
+    public List<Team> getAllTeams() {
+        List<Team> teams = new ArrayList<>();
+
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(selectAllQuery);
+
+            while (resultSet.next()) {
+                int teamId = resultSet.getInt("team_id");
+                int stadiumId = resultSet.getInt("stadium_id");
+                String name = resultSet.getString("name");
+                String createdAt = resultSet.getString("created_at");
+
+                Team team = Team.builder()
+                        .teamId(teamId)
+                        .stadiumId(stadiumId)
+                        .name(name)
+                        .createdAt(Timestamp.valueOf(createdAt))
+                        .build();
+
+                teams.add(team);
+            }
+
+            resultSet.close();
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return teams;
     }
 }

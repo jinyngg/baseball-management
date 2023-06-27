@@ -2,9 +2,10 @@ package com.fastcampus.baseballmanagement.team.dto;
 
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 @Getter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -12,5 +13,5 @@ public class Team {
     private int teamId;
     private int stadiumId;
     private String name;
-    private LocalDateTime createdAt;
+    private Timestamp createdAt;
 }
