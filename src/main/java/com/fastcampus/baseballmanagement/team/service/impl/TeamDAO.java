@@ -21,12 +21,6 @@ public class TeamDAO {
                     " ((SELECT NO FROM (SELECT IFNULL(MAX(team_id), 0) + 1 AS NO FROM team) t), ?, ?, now())"
             ;
 
-    private final String selectAllQuery =
-            "SELECT" +
-                    " team_id, stadium_id, name, created_at" +
-                    " FROM team"
-            ;
-
     private final String selectTeamListQuery =
             "SELECT" +
                     " t.team_id, t.stadium_id, t.name AS team_name, s.name AS stadium_name, t.created_at" +
@@ -63,10 +57,8 @@ public class TeamDAO {
 
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected > 0) {
-//                System.out.println("팀 등록 성공 : " + name);
                 response = new TeamRegistration("팀 등록에 성공했습니다.", name);
             } else {
-//                System.out.println("팀 등록 실패");
                 response = new TeamRegistration("팀 등록에 실패했습니다.", name);
             }
 
@@ -80,7 +72,7 @@ public class TeamDAO {
     /** 전체 팀 목록 */
     public TeamList getTeamList() {
         TeamList teamList;
-        List<TeamList.Team> teamArrayList = new ArrayList<>();
+        List<TeamList.TeamStadium> teamStadiums = new ArrayList<>();
 
         try {
             Statement statement = connection.createStatement();
@@ -93,7 +85,7 @@ public class TeamDAO {
                 String stadiumName = resultSet.getString("stadium_name");
                 String createdAt = resultSet.getString("created_at");
 
-                TeamList.Team team = TeamList.Team.builder()
+                TeamList.TeamStadium teamStadium = TeamList.TeamStadium.builder()
                         .teamId(teamId)
                         .stadiumId(stadiumId)
                         .teamName(teamName)
@@ -101,15 +93,15 @@ public class TeamDAO {
                         .createdAt(Timestamp.valueOf(createdAt))
                         .build();
 
-                teamArrayList.add(team);
+                teamStadiums.add(teamStadium);
             }
 
-            teamList = new TeamList("팀 조회에 성공했습니다.", teamArrayList);
+            teamList = new TeamList("팀 조회에 성공했습니다.", teamStadiums);
 
             resultSet.close();
             statement.close();
         } catch (SQLException e) {
-            teamList = new TeamList("팀 조회에 실패했습니다.", teamArrayList);
+            teamList = new TeamList("팀 조회에 실패했습니다.", teamStadiums);
             e.printStackTrace();
         }
 

@@ -8,12 +8,11 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-@ToString(callSuper = true)
-public class TeamList extends CustomResponse<List<TeamList.Team>> {
+public class TeamList extends CustomResponse<List<TeamList.TeamStadium>> {
 
     @Builder
     @ToString
-    public static class Team {
+    public static class TeamStadium {
         private int teamId;
         private int stadiumId;
         private String teamName;
@@ -21,8 +20,7 @@ public class TeamList extends CustomResponse<List<TeamList.Team>> {
         private Timestamp createdAt;
     }
 
-
-    public TeamList(String message, List<Team> data) {
+    public TeamList(String message, List<TeamStadium> data) {
         super(message, data);
     }
 }
