@@ -46,11 +46,8 @@ public class TeamDAO {
     }
 
     /** 팀 등록 */
-    public TeamRegistration.Response registerTeam(TeamRegistration.Request request)  {
-        String name = request.getName();
-        int stadiumId = request.getStadiumId();
-
-        TeamRegistration.Response response = null;
+    public TeamRegistration registerTeam(String name, int stadiumId)  {
+        TeamRegistration response = null;
 
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(insertQuery);
@@ -61,10 +58,10 @@ public class TeamDAO {
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected > 0) {
                 System.out.println("팀 등록 성공 : " + name);
-                response = new TeamRegistration.Response("팀 등록에 성공했습니다.", null);
+                response = new TeamRegistration("팀 등록에 성공했습니다.", null);
             } else {
                 System.out.println("팀 등록 실패");
-                response = new TeamRegistration.Response("팀 등록에 실패했습니다.", null);
+                response = new TeamRegistration("팀 등록에 실패했습니다.", null);
             }
 
         } catch (SQLException e) {
