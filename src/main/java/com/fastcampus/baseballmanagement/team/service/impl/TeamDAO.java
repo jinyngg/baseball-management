@@ -57,11 +57,11 @@ public class TeamDAO {
 
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected > 0) {
-                System.out.println("팀 등록 성공 : " + name);
-                response = new TeamRegistration("팀 등록에 성공했습니다.", null);
+//                System.out.println("팀 등록 성공 : " + name);
+                response = new TeamRegistration("팀 등록에 성공했습니다.", name);
             } else {
-                System.out.println("팀 등록 실패");
-                response = new TeamRegistration("팀 등록에 실패했습니다.", null);
+//                System.out.println("팀 등록 실패");
+                response = new TeamRegistration("팀 등록에 실패했습니다.", name);
             }
 
         } catch (SQLException e) {

@@ -17,6 +17,7 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public TeamRegistration registerTeam(String name, int stadiumId) {
         TeamRegistration response = teamDAO.registerTeam(name, stadiumId);
+        System.out.println(response.toString());
         return response;
     }
 
