@@ -1,11 +1,9 @@
 package com.fastcampus.baseballmanagement.stadium.service.impl;
 
-import com.fastcampus.baseballmanagement.stadium.Stadium;
-import org.apache.ibatis.annotations.Mapper;
+import com.fastcampus.baseballmanagement.stadium.dto.Stadium;
 
 import java.util.List;
 
-@Mapper
 interface StadiumDAO {
     Stadium findById(int id);
     List<Stadium> findAll();

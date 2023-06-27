@@ -1,10 +1,9 @@
 package com.fastcampus.baseballmanagement.team.service.impl;
 
-import com.fastcampus.baseballmanagement.team.dto.Team;
+import com.fastcampus.baseballmanagement.core.annotation.MyRequestMapping;
+import com.fastcampus.baseballmanagement.team.dto.TeamList;
 import com.fastcampus.baseballmanagement.team.dto.TeamRegistration;
 import com.fastcampus.baseballmanagement.team.service.TeamService;
-
-import java.util.List;
 
 public class TeamServiceImpl implements TeamService {
 
@@ -15,14 +14,18 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
+    @MyRequestMapping("팀등록")
     public TeamRegistration registerTeam(String name, int stadiumId) {
         TeamRegistration response = teamDAO.registerTeam(name, stadiumId);
+        System.out.println(response.toString());
         return response;
     }
 
     @Override
-    public List<Team> getTeamList() {
-        List<Team> teams = teamDAO.getAllTeams();
-        return teams;
+    @MyRequestMapping("팀목록")
+    public TeamList getTeamList() {
+        TeamList response = teamDAO.getTeamList();
+        System.out.println(response.toString());
+        return response;
     }
 }

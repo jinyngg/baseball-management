@@ -1,6 +1,6 @@
 package com.fastcampus.baseballmanagement.stadium.service;
 
-import com.fastcampus.baseballmanagement.stadium.Stadium;
+import com.fastcampus.baseballmanagement.stadium.dto.Stadium;
 
 import java.util.List;
 

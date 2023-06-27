@@ -4,13 +4,15 @@ import com.fastcampus.baseballmanagement.common.CustomResponse;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
 @NoArgsConstructor
-public class TeamRegistration extends CustomResponse<Team> {
+@ToString(callSuper = true)
+public class TeamRegistration extends CustomResponse<String> {
 
     @Builder
-    public TeamRegistration(String message, Team data) {
+    public TeamRegistration(String message, String data) {
         super(message, data);
     }
 }
