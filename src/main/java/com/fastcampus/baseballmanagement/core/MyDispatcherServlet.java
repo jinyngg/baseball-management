@@ -3,7 +3,6 @@ package com.fastcampus.baseballmanagement.core;
 import com.fastcampus.baseballmanagement.core.annotation.MyBean;
 import com.fastcampus.baseballmanagement.core.annotation.MyRequestMapping;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.HashMap;
@@ -16,14 +15,13 @@ public class MyDispatcherServlet {
     private final Map<String, Object> configMap = new HashMap<>();
 
     public void init(String pkg) throws Exception {
-        Set<Class> classes = myConfigurationScan.configurationScan(pkg);
-        for(Class clazz : classes) {
-            Object instance = clazz.newInstance();
+        Set<Class<?>> classes = myConfigurationScan.configurationScan(pkg);
+        for(Class<?> clazz : classes) {
+            Object instance = clazz.getDeclaredConstructor().newInstance();
             Method[] methods = clazz.getDeclaredMethods();
             for (Method method : methods) {
-                Annotation annotation = method.getDeclaredAnnotation(MyBean.class);
-                MyBean myBean = (MyBean) annotation;
-                if (myBean != null) {
+                MyBean annotation = method.getDeclaredAnnotation(MyBean.class);
+                if (annotation != null) {
                     Object object = method.invoke(instance);
                     configMap.put(object.toString(), object);
                 }
@@ -37,9 +35,8 @@ public class MyDispatcherServlet {
             Class<?> objectClass = object.getClass();
             Method[] objectMethods = objectClass.getDeclaredMethods();
             for(Method objectMethod : objectMethods) {
-                Annotation anno = objectMethod.getDeclaredAnnotation(MyRequestMapping.class);
-                MyRequestMapping requestMapping = (MyRequestMapping) anno;
-                if(requestMapping != null && requestMapping.value().equals(uri)) {
+                MyRequestMapping anno = objectMethod.getDeclaredAnnotation(MyRequestMapping.class);
+                if(anno != null && anno.value().equals(uri)) {
                     objectMethod.invoke(object);
                 }
             }
@@ -52,14 +49,13 @@ public class MyDispatcherServlet {
             Class<?> objectClass = object.getClass();
             Method[] objectMethods = objectClass.getDeclaredMethods();
             for(Method objectMethod : objectMethods) {
-                Annotation annotation = objectMethod.getDeclaredAnnotation(MyRequestMapping.class);
-                MyRequestMapping requestMapping = (MyRequestMapping) annotation;
-                if(requestMapping != null && requestMapping.value().equals(uri)) {
+                MyRequestMapping anno = objectMethod.getDeclaredAnnotation(MyRequestMapping.class);
+                if(anno != null && anno.value().equals(uri)) {
                     Parameter[] parameters = objectMethod.getParameters();
                     Object[] arg = new Object[objectMethod.getParameterCount()];
                     for(int i=0; i<arg.length; i++) {
                         String name = parameters[i].getName();
-                        Class type = parameters[i].getType();
+                        Class<?> type = parameters[i].getType();
                         String value = map.get(name);
                         arg[i] = convertTo(value, type);
                     }
@@ -69,7 +65,7 @@ public class MyDispatcherServlet {
         }
     }
 
-    private Object convertTo(String value, Class type) {
+    private Object convertTo(String value, Class<?> type) {
         if(type==null || value==null || type.isInstance(value))
             return value;
         if(type==int.class)
