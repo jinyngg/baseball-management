@@ -17,7 +17,7 @@ public class TeamServiceImpl implements TeamService {
     @MyRequestMapping("팀등록")
     public TeamRegistration registerTeam(String name, int stadiumId) {
         TeamRegistration response = teamDAO.registerTeam(name, stadiumId);
-        System.out.println(response.toString());
+        System.out.println(response);
         return response;
     }
 
@@ -25,7 +25,7 @@ public class TeamServiceImpl implements TeamService {
     @MyRequestMapping("팀목록")
     public TeamList getTeamList() {
         TeamList response = teamDAO.getTeamList();
-        System.out.println(response.toString());
+        System.out.println(response);
         return response;
     }
 }

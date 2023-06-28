@@ -1,9 +1,7 @@
 package com.fastcampus.baseballmanagement.player.service;
 
-import com.fastcampus.baseballmanagement.player.dto.Player;
+import com.fastcampus.baseballmanagement.player.dto.PlayerList;
 import com.fastcampus.baseballmanagement.player.dto.PlayerRegistration;
-
-import java.util.List;
 
 public interface PlayerService {
 
@@ -11,5 +9,5 @@ public interface PlayerService {
     PlayerRegistration registerPlayer(int teamId, String name, String position);
 
     // 팀별 선수 목록 조회
-    List<Player> getPlayerListByTeam(int teamId);
+    PlayerList getPlayerListByTeam(int teamId);
 }

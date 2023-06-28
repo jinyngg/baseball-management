@@ -12,9 +12,11 @@ public class CustomResponse<T> {
     private String message;
     private T data;
 
+    @Override
     public String toString() {
-        return "message = " + message + "\n" +
-                "data = " + String.valueOf(data) + "\n";
+        return "CustomResponse = {" +
+                "message='" + message + '\'' +
+                ", data=" + data +
+                '}';
     }
-
 }

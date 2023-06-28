@@ -45,45 +45,41 @@ public class TeamDAO {
         return teamDAO;
     }
 
-    /** 팀 등록 */
-    public TeamRegistration registerTeam(String name, int stadiumId)  {
-        TeamRegistration response = null;
+    /** 팀 등록
+     * refactor(23.06.28)
+     * 1. try-with-resources -> Statement 리소스 누수 방지
+     * 2. rowsAffected -> message 관리
+     * 3. 예외시에도 메세지 응답 처리
+     */
+    public TeamRegistration registerTeam(String name, int stadiumId) {
+        String message;
 
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(insertQuery);
-
+        try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
             preparedStatement.setString(1, name);
             preparedStatement.setInt(2, stadiumId);
 
             int rowsAffected = preparedStatement.executeUpdate();
-            if (rowsAffected > 0) {
-//                response = new TeamRegistration("팀 등록에 성공했습니다.", name);
-                return TeamRegistration.builder()
-                        .message("팀 등록에 성공했습니다.")
-                        .data(name)
-                        .build();
-            } else {
-//                response = new TeamRegistration("팀 등록에 실패했습니다.", name);
-                return TeamRegistration.builder()
-                        .message("팀 등록에 실패했습니다.")
-                        .data(name)
-                        .build();
-            }
+            message = (rowsAffected > 0) ? "팀 등록에 성공했습니다." : "팀 등록에 실패했습니다.";
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return TeamRegistration.builder()
-                    .message("팀 등록에 실패했습니다.")
-                    .data(name)
-                    .build();
+            message = "팀 등록에 실패했습니다. (SQLException)";
         }
 
-//        return response;
+        return TeamRegistration.builder()
+                .message(message)
+                .data(name)
+                .build();
+
     }
 
-    /** 전체 팀 목록 */
+    /** 전체 팀 목록
+     * refactor(23.06.28)
+     * 1. try-with-resources -> Statement 리소스 누수 방지
+     * */
     public TeamList getTeamList() {
         List<TeamList.TeamStadium> teamStadiums = new ArrayList<>();
+        String message;
 
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(selectTeamListQuery)) {
@@ -93,34 +89,29 @@ public class TeamDAO {
                 int stadiumId = resultSet.getInt("stadium_id");
                 String teamName = resultSet.getString("team_name");
                 String stadiumName = resultSet.getString("stadium_name");
-                String createdAt = resultSet.getString("created_at");
+                Timestamp createdAt = resultSet.getTimestamp("created_at");
 
                 TeamList.TeamStadium team = TeamList.TeamStadium.builder()
                         .teamId(teamId)
                         .stadiumId(stadiumId)
                         .teamName(teamName)
                         .stadiumName(stadiumName)
-                        .createdAt(Timestamp.valueOf(createdAt))
+                        .createdAt(createdAt)
                         .build();
 
                 teamStadiums.add(team);
             }
 
-//            return new TeamList("팀 조회에 성공했습니다.", teamStadiums);
-            return TeamList.builder()
-                    .message("팀 조회에 성공했습니다.")
-                    .data(teamStadiums)
-                    .build();
-
+            message = "팀 조회에 성공했습니다.";
         } catch (SQLException e) {
             e.printStackTrace();
-//            return new TeamList("팀 조회에 실패했습니다.", teamStadiums);
-            return TeamList.builder()
-                    .message("팀 조회에 실패했습니다.")
-                    .data(teamStadiums)
-                    .build();
+            message = "팀 조회에 실패했습니다.";
         }
 
+        return TeamList.builder()
+                .message(message)
+                .data(teamStadiums)
+                .build();
     }
 
 }
