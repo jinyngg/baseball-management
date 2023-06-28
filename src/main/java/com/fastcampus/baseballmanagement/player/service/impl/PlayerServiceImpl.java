@@ -1,11 +1,9 @@
 package com.fastcampus.baseballmanagement.player.service.impl;
 
 import com.fastcampus.baseballmanagement.core.annotation.MyRequestMapping;
-import com.fastcampus.baseballmanagement.player.dto.Player;
+import com.fastcampus.baseballmanagement.player.dto.PlayerList;
 import com.fastcampus.baseballmanagement.player.dto.PlayerRegistration;
 import com.fastcampus.baseballmanagement.player.service.PlayerService;
-
-import java.util.List;
 
 public class PlayerServiceImpl implements PlayerService {
 
@@ -24,7 +22,10 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public List<Player> getPlayerListByTeam(int teamId) {
-        return null;
+    @MyRequestMapping("선수목록")
+    public PlayerList getPlayerListByTeam(int teamId) {
+        PlayerList response = playerDAO.getPlayerListByTeam(teamId);
+        System.out.println(response);
+        return response;
     }
 }

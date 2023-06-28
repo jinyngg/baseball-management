@@ -16,7 +16,7 @@ public class MyDispatcherServlet {
 
     public void init(String pkg) throws Exception {
         Set<Class<?>> classes = myConfigurationScan.configurationScan(pkg);
-        for(Class<?> clazz : classes) {
+        for (Class<?> clazz : classes) {
             Object instance = clazz.getDeclaredConstructor().newInstance();
             Method[] methods = clazz.getDeclaredMethods();
             for (Method method : methods) {
@@ -66,10 +66,13 @@ public class MyDispatcherServlet {
     }
 
     private Object convertTo(String value, Class<?> type) {
-        if(type==null || value==null || type.isInstance(value))
+        if (type == null || value == null || type.isInstance(value)) {
             return value;
-        if(type==int.class)
+        }
+        if (type == int.class) {
             return Integer.valueOf(value);
+        }
+
         return value;
     }
 
