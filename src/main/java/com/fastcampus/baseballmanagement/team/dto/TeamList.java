@@ -20,6 +20,7 @@ public class TeamList extends CustomResponse<List<TeamList.TeamStadium>> {
         private Timestamp createdAt;
     }
 
+    @Builder
     public TeamList(String message, List<TeamStadium> data) {
         super(message, data);
     }

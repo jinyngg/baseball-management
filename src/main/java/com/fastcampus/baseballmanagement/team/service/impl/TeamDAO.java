@@ -57,26 +57,36 @@ public class TeamDAO {
 
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected > 0) {
-                response = new TeamRegistration("팀 등록에 성공했습니다.", name);
+//                response = new TeamRegistration("팀 등록에 성공했습니다.", name);
+                return TeamRegistration.builder()
+                        .message("팀 등록에 성공했습니다.")
+                        .data(name)
+                        .build();
             } else {
-                response = new TeamRegistration("팀 등록에 실패했습니다.", name);
+//                response = new TeamRegistration("팀 등록에 실패했습니다.", name);
+                return TeamRegistration.builder()
+                        .message("팀 등록에 실패했습니다.")
+                        .data(name)
+                        .build();
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
+            return TeamRegistration.builder()
+                    .message("팀 등록에 실패했습니다.")
+                    .data(name)
+                    .build();
         }
 
-        return response;
+//        return response;
     }
 
     /** 전체 팀 목록 */
     public TeamList getTeamList() {
-        TeamList teamList;
         List<TeamList.TeamStadium> teamStadiums = new ArrayList<>();
 
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(selectTeamListQuery);
+        try (Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(selectTeamListQuery)) {
 
             while (resultSet.next()) {
                 int teamId = resultSet.getInt("team_id");
@@ -85,7 +95,7 @@ public class TeamDAO {
                 String stadiumName = resultSet.getString("stadium_name");
                 String createdAt = resultSet.getString("created_at");
 
-                TeamList.TeamStadium teamStadium = TeamList.TeamStadium.builder()
+                TeamList.TeamStadium team = TeamList.TeamStadium.builder()
                         .teamId(teamId)
                         .stadiumId(stadiumId)
                         .teamName(teamName)
@@ -93,19 +103,24 @@ public class TeamDAO {
                         .createdAt(Timestamp.valueOf(createdAt))
                         .build();
 
-                teamStadiums.add(teamStadium);
+                teamStadiums.add(team);
             }
 
-            teamList = new TeamList("팀 조회에 성공했습니다.", teamStadiums);
+//            return new TeamList("팀 조회에 성공했습니다.", teamStadiums);
+            return TeamList.builder()
+                    .message("팀 조회에 성공했습니다.")
+                    .data(teamStadiums)
+                    .build();
 
-            resultSet.close();
-            statement.close();
         } catch (SQLException e) {
-            teamList = new TeamList("팀 조회에 실패했습니다.", teamStadiums);
             e.printStackTrace();
+//            return new TeamList("팀 조회에 실패했습니다.", teamStadiums);
+            return TeamList.builder()
+                    .message("팀 조회에 실패했습니다.")
+                    .data(teamStadiums)
+                    .build();
         }
 
-        return teamList;
     }
 
 }
