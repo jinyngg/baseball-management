@@ -9,5 +9,5 @@ public interface TeamService {
     TeamRegistration registerTeam(String name, int stadiumId);
 
     // 팀 목록 조회
-    public TeamList getTeamList();
+    TeamList getTeamList();
 }
