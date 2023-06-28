@@ -1,4 +1,10 @@
 
+## 0️⃣ 프로젝트
+
+![image](https://github.com/jinyngg/baseball-management/assets/96164211/f7eaa4d4-1395-4c78-adad-a9b5cfbfa1ef)
+
+![image](https://github.com/jinyngg/baseball-management/assets/96164211/3ccbbbf8-c0d2-4db3-942f-581a12bed118)
+
 ## 1️⃣ 요구사항
 
 1. 모든 결과는 Console에 출력
