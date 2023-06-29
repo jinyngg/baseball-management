@@ -164,6 +164,16 @@ player 테이블에 포지션 칼럼은 팀 별로 유일해야 합니다.(playe
 out_player에 퇴출 선수를 insert하고, player 테이블에서 해당 선수의 team_id를 null로 변경합니다.
 ````
 
+### 선수 퇴출 목록 ```손영준```
+
+```
+요청 : 퇴출목록
+응답 : OutPlayerRespDTO에 담아서 출력합니다.
+```
+
+![image](https://github.com/jinyngg/baseball-management/assets/96164211/037e45e4-4a3a-41aa-ae64-4e6e1f97aae9)
+
+
 ````호출 전````
 
 ![image](https://github.com/jinyngg/baseball-management/assets/96164211/1774baac-88b3-461b-91e5-7fb155f75f58)
