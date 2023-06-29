@@ -1,5 +1,7 @@
 package com.fastcampus.baseballmanagement.core.annotation;
 
+import com.fastcampus.baseballmanagement.outPlayer.service.OutPlayerService;
+import com.fastcampus.baseballmanagement.outPlayer.service.impl.OutPlayerServiceImpl;
 import com.fastcampus.baseballmanagement.player.service.PlayerService;
 import com.fastcampus.baseballmanagement.player.service.impl.PlayerServiceImpl;
 import com.fastcampus.baseballmanagement.stadium.service.StadiumService;
@@ -23,6 +25,11 @@ public class AppConfig {
     @MyBean
     public PlayerService playerService() {
         return new PlayerServiceImpl();
+    }
+
+    @MyBean
+    public OutPlayerService outPlayerService() {
+        return new OutPlayerServiceImpl();
     }
 
 }
