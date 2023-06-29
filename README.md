@@ -90,7 +90,14 @@ CREATE TABLE out_player (
 
 ## 3️⃣ 구현 기능
 
-### 야구장 등록
+### 코어 작성 ```손영준```
+
+![image](https://github.com/jinyngg/baseball-management/assets/96164211/494e3741-4dc4-4b4b-9ff6-97b357f8264f)
+
+![image](https://github.com/jinyngg/baseball-management/assets/96164211/89d09383-bf90-4850-a435-8c9e6bbf45a2)
+
+
+### 야구장 등록 ```손영준```
 
 ````
 요청 : 야구장등록?name=잠실야구장
@@ -99,7 +106,7 @@ CREATE TABLE out_player (
 
 ![image](https://github.com/jinyngg/baseball-management/assets/96164211/4c3cad87-8d02-4eaf-911f-c4b26b1c9ca4)
 
-### 전체 야구장 목록보기
+### 전체 야구장 목록보기 ```손영준````
 
 ````
 요청 : 야구장목록
@@ -108,7 +115,7 @@ CREATE TABLE out_player (
 
 ![image](https://github.com/jinyngg/baseball-management/assets/96164211/5cf13f39-33ec-4baf-9d69-5726f073206a)
 
-### 팀 등록
+### 팀 등록 ```장진영```
 
 ````
 요청 : 팀등록?stadiumId=1&name=NC
@@ -117,7 +124,7 @@ CREATE TABLE out_player (
 
 ![image](https://github.com/jinyngg/baseball-management/assets/96164211/709c7df3-4de0-42fa-b401-645c69b8e081)
 
-### 전체 팀 목록
+### 전체 팀 목록 ```장진영```
 
 ````
 요청 : 팀목록
@@ -126,7 +133,7 @@ CREATE TABLE out_player (
 
 ![image](https://github.com/jinyngg/baseball-management/assets/96164211/9e34a9ab-ffa7-4574-b810-b2acdb1d5b67)
 
-### 선수 등록
+### 선수 등록 ```장진영```
 
 ````
 요청 : 선수등록?teamId=1&name=이대호&position=1루수
@@ -138,7 +145,7 @@ player 테이블에 포지션 칼럼은 팀 별로 유일해야 합니다.(playe
 
 ![image](https://github.com/jinyngg/baseball-management/assets/96164211/66c3f885-71b5-45c7-850f-6acbb0a11eba)
 
-### 팀별 선수 목록
+### 팀별 선수 목록 ```장진영```
 
 ````
 요청 : 선수목록?teamId=1
@@ -147,7 +154,7 @@ player 테이블에 포지션 칼럼은 팀 별로 유일해야 합니다.(playe
 
 ![image](https://github.com/jinyngg/baseball-management/assets/96164211/eb1c7e68-427c-429c-93da-b98fdd271382)
 
-### 선수 퇴출 등록
+### 선수 퇴출 등록 ```손영준```
 
 ````
 요청 : 퇴출등록?playerId=1&reason=도박
@@ -165,7 +172,7 @@ out_player에 퇴출 선수를 insert하고, player 테이블에서 해당 선�
 
 ![image](https://github.com/jinyngg/baseball-management/assets/96164211/a56863b2-1980-4b35-978a-d67fa408f3ad)
 
-### 포지션별 팀 야구 선수 페이지
+### 포지션별 팀 야구 선수 페이지 ```장진영```
 
 ````
 요청 : 포지션별목록
