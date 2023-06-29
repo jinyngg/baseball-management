@@ -6,14 +6,14 @@ import java.util.Scanner;
 
 public class BaseballManagementApplication {
 
-	private static final MyDispatcherServlet myDispatcherServlet = new MyDispatcherServlet();
+	private static final MyDispatcherServlet myDispatcherServlet = MyDispatcherServlet.getInstance();
 
 	public static void main(String[] args) throws Exception {
-		myDispatcherServlet.configurationInit();
-
 		Scanner sc = new Scanner(System.in);
-		String uri = sc.nextLine();
-		myDispatcherServlet.parseUri(uri);
+		while (true) {
+			String uri = sc.nextLine();
+			myDispatcherServlet.parseUri(uri);
+		}
 	}
 
 }

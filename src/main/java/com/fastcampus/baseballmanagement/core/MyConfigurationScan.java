@@ -3,6 +3,7 @@ package com.fastcampus.baseballmanagement.core;
 import com.fastcampus.baseballmanagement.core.annotation.MyConfiguration;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,11 +14,15 @@ public class MyConfigurationScan {
     private static final String PKG = "com.fastcampus.baseballmanagement";
     private final Set<Class<?>> configurationClass = new HashSet<>();
 
-    public Set<Class<?>> getConfigurationClass() throws Exception {
+    public Set<Class<?>> getConfigurationClass() {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         URL url = classLoader.getResource(PKG.replace(".", "/"));
-        File files = new File(url.toURI());
-        scanFilePackage(PKG, files);
+        try {
+            File files = new File(url.toURI());
+            scanFilePackage(PKG, files);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return configurationClass;
     }
 
