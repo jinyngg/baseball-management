@@ -106,7 +106,7 @@ CREATE TABLE out_player (
 
 ![image](https://github.com/jinyngg/baseball-management/assets/96164211/4c3cad87-8d02-4eaf-911f-c4b26b1c9ca4)
 
-### 전체 야구장 목록보기 ```손영준````
+### 전체 야구장 목록보기 ```손영준```
 
 ````
 요청 : 야구장목록
