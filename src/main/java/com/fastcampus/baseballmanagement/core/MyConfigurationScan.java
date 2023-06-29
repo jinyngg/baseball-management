@@ -3,33 +3,44 @@ package com.fastcampus.baseballmanagement.core;
 import com.fastcampus.baseballmanagement.core.annotation.MyConfiguration;
 
 import java.io.File;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
 
+// TODO : 06.29 Refactoring
 public class MyConfigurationScan {
 
-    public Set<Class<?>> configurationScan(String pkg) throws URISyntaxException, ClassNotFoundException {
+    private static final String PKG = "com.fastcampus.baseballmanagement";
+    private final Set<Class<?>> configurationClass = new HashSet<>();
+
+    public Set<Class<?>> getConfigurationClass() throws Exception {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        Set<Class<?>> classSet = new HashSet<>();
-        URL url = classLoader.getResource(pkg.replace(".", "/"));
+        URL url = classLoader.getResource(PKG.replace(".", "/"));
         File files = new File(url.toURI());
-        scanPackage(pkg, files, classSet);
-        return classSet;
+        scanFilePackage(PKG, files);
+        return configurationClass;
     }
-    private void scanPackage(String pkg, File files, Set<Class<?>> classSet) throws ClassNotFoundException {
+
+    private void scanFilePackage(String scanPackage, File files) throws Exception {
         for(File file : files.listFiles()) {
             String fileName = file.getName();
-            if(file.isDirectory()) {
-                scanPackage(pkg + "." + fileName, file, classSet);
-            } else if(fileName.endsWith(".class")) {
-                String className = pkg + "." + fileName.replace(".class", "");
-                Class<?> clazz = Class.forName(className);
-                if(clazz.isAnnotationPresent(MyConfiguration.class)) {
-                    classSet.add(clazz);
-                }
+            if (file.isDirectory()) {
+                scanFilePackage(String.join(".", scanPackage, fileName), file);
+            }
+            if (fileName.endsWith(".class")) {
+                addConfigurationClass(scanPackage, fileName);
             }
         }
     }
+
+    private void addConfigurationClass(String scanPackage, String fileName) throws Exception {
+        String classFileName = fileName.replace(".class", "");
+        String className = String.format("%s.%s", scanPackage, classFileName);
+        Class<?> clazz = Class.forName(className);
+        if (!clazz.isAnnotationPresent(MyConfiguration.class)) {
+            return;
+        }
+        configurationClass.add(clazz);
+    }
+
 }
