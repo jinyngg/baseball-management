@@ -1,8 +1,8 @@
-package com.fastcampus.baseballmanagement.outplayer.service.impl;
+package com.fastcampus.baseballmanagement.outPlayer.service.impl;
 
 import com.fastcampus.baseballmanagement.config.DBConnection;
-import com.fastcampus.baseballmanagement.outplayer.dto.OutPlayerList;
-import com.fastcampus.baseballmanagement.outplayer.dto.OutPlayerRegistration;
+import com.fastcampus.baseballmanagement.outPlayer.dto.OutPlayerList;
+import com.fastcampus.baseballmanagement.outPlayer.dto.OutPlayerRegistration;
 import com.fastcampus.baseballmanagement.player.type.Position;
 
 import java.sql.*;

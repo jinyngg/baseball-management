@@ -1,4 +1,4 @@
-package com.fastcampus.baseballmanagement.outplayer.dto;
+package com.fastcampus.baseballmanagement.outPlayer.dto;
 
 import lombok.*;
 

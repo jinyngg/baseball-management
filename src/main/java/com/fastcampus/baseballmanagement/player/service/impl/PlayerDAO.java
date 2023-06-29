@@ -3,11 +3,11 @@ package com.fastcampus.baseballmanagement.player.service.impl;
 import com.fastcampus.baseballmanagement.config.DBConnection;
 import com.fastcampus.baseballmanagement.player.dto.PlayerList;
 import com.fastcampus.baseballmanagement.player.dto.PlayerRegistration;
+import com.fastcampus.baseballmanagement.player.dto.PositionTeamPlayer;
 import com.fastcampus.baseballmanagement.player.type.Position;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class PlayerDAO {
 
@@ -32,6 +32,12 @@ public class PlayerDAO {
                     " FROM player" +
                     " WHERE team_id = ?";
 
+    private final String selectByPlayerAndPositionQuery =
+            "SELECT" +
+                    " t.name AS team_name, p.name AS player_name , p.position" +
+                    " FROM player p" +
+                    " join team t on p.team_id = t.team_id";
+
     private static PlayerDAO playerDAO;
 
     private PlayerDAO(Connection connection) {
@@ -49,7 +55,7 @@ public class PlayerDAO {
 
         return playerDAO;
     }
-    
+
     /** 선수 등록 */
     public PlayerRegistration registerPlayer(int teamId, String name, String position) {
         String message;
@@ -142,5 +148,71 @@ public class PlayerDAO {
                 .message(message)
                 .data(playerList)
                 .build();
+    }
+
+    /** 포지션별 팀 야구 선수 조회 */
+    public PositionTeamPlayer getPositionTeamPlayers() {
+        Map<String, Map<String, String>> positionTeamPlayers = new HashMap<>();
+        String message;
+
+        try (Statement statement = connection.createStatement()) {
+            ResultSet resultSet = statement.executeQuery(selectByPlayerAndPositionQuery);
+
+            while (resultSet.next()) {
+                String teamName = resultSet.getString("team_name");
+                String playerName = resultSet.getString("player_name");
+                String position = resultSet.getString("position");
+
+                Map<String, String> teamPlayers = positionTeamPlayers.getOrDefault(position, new HashMap<>());
+                teamPlayers.put(teamName, playerName);
+
+                positionTeamPlayers.put(position, teamPlayers);
+            }
+
+            message = "포지션별 팀 야구 선수 조회에 성공했습니다.";
+        } catch (SQLException e) {
+            e.printStackTrace();
+            message = "포지션별 팀 야구 선수 조회에 실패했습니다.";
+        }
+
+        printPosition(positionTeamPlayers);
+        return PositionTeamPlayer.builder()
+                .message(message)
+                .data(positionTeamPlayers)
+                .build();
+    }
+
+    private static void printPosition(Map<String, Map<String, String>> positionTeamPlayers) {
+        StringBuilder header = new StringBuilder(String.format("| %-8s |", "포지션"));
+        Set<String> teams = new HashSet<>();
+
+        for (Map<String, String> teamPlayers : positionTeamPlayers.values()) {
+            teams.addAll(teamPlayers.keySet());
+        }
+
+        List<String> sortedTeams = new ArrayList<>(teams);
+        Collections.sort(sortedTeams);
+
+        for (String team : sortedTeams) {
+            header.append(String.format(" %-8s |", team));
+        }
+
+        String separator = String.format("|%s|", "-".repeat(header.length() - 2));
+
+        System.out.println(header);
+        System.out.println(separator);
+
+        for (Map.Entry<String, Map<String, String>> entry : positionTeamPlayers.entrySet()) {
+            String position = entry.getKey();
+            Map<String, String> teamPlayers = entry.getValue();
+            StringBuilder positionPlayers = new StringBuilder(String.format("| %-8s |", position));
+
+            for (String team : sortedTeams) {
+                String player = teamPlayers.getOrDefault(team, "");
+                positionPlayers.append(String.format(" %-8s |", player));
+            }
+
+            System.out.println(positionPlayers);
+        }
     }
 }

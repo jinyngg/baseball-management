@@ -14,9 +14,9 @@ public class CustomResponse<T> {
 
     @Override
     public String toString() {
-        return "CustomResponse = {" +
-                "message='" + message + '\'' +
-                ", data=" + data +
+        return "Response = {" +
+                "message = '" + message + '\'' +
+                ", data = " + data +
                 '}';
     }
 }
