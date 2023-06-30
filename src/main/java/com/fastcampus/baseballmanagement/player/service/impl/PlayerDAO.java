@@ -1,6 +1,7 @@
 package com.fastcampus.baseballmanagement.player.service.impl;
 
 import com.fastcampus.baseballmanagement.config.DBConnection;
+import com.fastcampus.baseballmanagement.exception.PlayerException;
 import com.fastcampus.baseballmanagement.player.dto.PlayerList;
 import com.fastcampus.baseballmanagement.player.dto.PlayerRegistration;
 import com.fastcampus.baseballmanagement.player.dto.PositionTeamPlayer;
@@ -8,6 +9,8 @@ import com.fastcampus.baseballmanagement.player.type.Position;
 
 import java.sql.*;
 import java.util.*;
+
+import static com.fastcampus.baseballmanagement.exception.ErrorCode.*;
 
 public class PlayerDAO {
 
@@ -57,26 +60,18 @@ public class PlayerDAO {
     }
 
     /** 선수 등록 */
-    public PlayerRegistration registerPlayer(int teamId, String name, String position) {
+    public PlayerRegistration registerPlayer(int teamId, String name, String position) throws PlayerException {
         String message;
 
         // 입력받은 포지션이 유효한지 확인
         Position playerPosition = Position.getPositionByName(position);
         if (playerPosition == null) {
-            message = "유효하지 않은 포지션입니다.";
-            return PlayerRegistration.builder()
-                    .message(message)
-                    .data(name)
-                    .build();
+            throw new PlayerException(INVALID_POSITION, name);
         }
 
         // 중복 포지션 확인
         if (isDuplicatePosition(teamId, playerPosition)) {
-            message = "이미 동일한 포지션의 선수가 등록되어 있습니다.";
-            return PlayerRegistration.builder()
-                    .message(message)
-                    .data(name)
-                    .build();
+            throw new PlayerException(DUPLICATE_PLAYER_POSITION, name);
         }
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
@@ -88,8 +83,7 @@ public class PlayerDAO {
             message = (rowsAffected > 0) ? "선수 등록에 성공했습니다." : "선수 등록에 실패했습니다.";
 
         } catch (SQLException e) {
-            e.printStackTrace();
-            message = "선수 등록에 실패했습니다. (SQLException)";
+            throw new PlayerException(SQL_EXCEPTION, e.getMessage());
         }
 
         return PlayerRegistration.builder()
@@ -113,9 +107,9 @@ public class PlayerDAO {
     }
 
     /** 팀별 선수 목록 조회 */
-    public PlayerList getPlayerListByTeam(int teamId) {
+    public PlayerList getPlayerListByTeam(int teamId) throws PlayerException {
         List<PlayerList.PlayerInfo> playerList = new ArrayList<>();
-        String message;
+        String message = "팀별 선수 목록 조회에 실패했습니다.";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(selectByTeamQuery)) {
             preparedStatement.setInt(1, teamId);
@@ -136,12 +130,11 @@ public class PlayerDAO {
                         .build();
 
                 playerList.add(playerInfo);
+                message = "팀별 선수 목록 조회에 성공했습니다.";
             }
 
-            message = "팀별 선수 목록 조회에 성공했습니다.";
         } catch (SQLException e) {
-            e.printStackTrace();
-            message = "팀별 선수 목록 조회에 실패했습니다.";
+            throw new PlayerException(SQL_EXCEPTION, e.getMessage());
         }
 
         return PlayerList.builder()
@@ -151,7 +144,7 @@ public class PlayerDAO {
     }
 
     /** 포지션별 팀 야구 선수 조회 */
-    public PositionTeamPlayer getPositionTeamPlayers() {
+    public PositionTeamPlayer getPositionTeamPlayers() throws PlayerException {
         Map<String, Map<String, String>> positionTeamPlayers = new HashMap<>();
         String message;
 
@@ -171,8 +164,7 @@ public class PlayerDAO {
 
             message = "포지션별 팀 야구 선수 조회에 성공했습니다.";
         } catch (SQLException e) {
-            e.printStackTrace();
-            message = "포지션별 팀 야구 선수 조회에 실패했습니다.";
+            throw new PlayerException(SQL_EXCEPTION, e.getMessage());
         }
 
         printPosition(positionTeamPlayers);

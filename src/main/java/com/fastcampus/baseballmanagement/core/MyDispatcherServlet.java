@@ -135,11 +135,12 @@ public class MyDispatcherServlet {
             objectMethod.invoke(object, arg);
         } catch (InvocationTargetException | IllegalAccessException exception) {
             String exceptionCauseName = exception.getCause().getClass().getSimpleName();
-            resolveException(exceptionCauseName);
+            Object excetpioonObject = exception.getCause();
+            resolveException(exceptionCauseName, excetpioonObject);
         }
     }
 
-    private void resolveException(String exceptionCauseName) {
+    private void resolveException(String exceptionCauseName, Object excetpioonObject) {
         for (Object exptionObject : myExceptionHandlerFactory.keySet()) {
             Map<String, Method> exceptionMethod = myExceptionHandlerFactory.get(exptionObject);
             for (String exceptionName : exceptionMethod.keySet()) {
@@ -148,7 +149,8 @@ public class MyDispatcherServlet {
                 }
                 Method method = exceptionMethod.get(exceptionName);
                 try {
-                    method.invoke(exptionObject);
+                    method.invoke(exptionObject, excetpioonObject);
+//                    method.invoke(exptionObject);
                 } catch (InvocationTargetException | IllegalAccessException e) {
                     e.printStackTrace();
                 }

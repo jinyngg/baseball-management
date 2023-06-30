@@ -1,6 +1,7 @@
 package com.fastcampus.baseballmanagement.team.service.impl;
 
 import com.fastcampus.baseballmanagement.core.annotation.MyRequestMapping;
+import com.fastcampus.baseballmanagement.exception.TeamException;
 import com.fastcampus.baseballmanagement.team.dto.TeamList;
 import com.fastcampus.baseballmanagement.team.dto.TeamRegistration;
 import com.fastcampus.baseballmanagement.team.service.TeamService;
@@ -15,7 +16,7 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     @MyRequestMapping("팀등록")
-    public TeamRegistration registerTeam(String name, int stadiumId) {
+    public TeamRegistration registerTeam(String name, int stadiumId) throws TeamException {
         TeamRegistration response = teamDAO.registerTeam(name, stadiumId);
         System.out.println(response);
         return response;
@@ -23,7 +24,7 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     @MyRequestMapping("팀목록")
-    public TeamList getTeamList() {
+    public TeamList getTeamList() throws TeamException {
         TeamList response = teamDAO.getTeamList();
         System.out.println(response);
         return response;
