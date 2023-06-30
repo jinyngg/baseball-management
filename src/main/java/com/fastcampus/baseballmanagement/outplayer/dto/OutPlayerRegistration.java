@@ -1,4 +1,4 @@
-package com.fastcampus.baseballmanagement.outPlayer.dto;
+package com.fastcampus.baseballmanagement.outplayer.dto;
 
 import com.fastcampus.baseballmanagement.common.CustomResponse;
 import lombok.Builder;

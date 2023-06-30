@@ -1,4 +1,4 @@
-package com.fastcampus.baseballmanagement.outPlayer.dto;
+package com.fastcampus.baseballmanagement.outplayer.dto;
 
 import com.fastcampus.baseballmanagement.common.CustomResponse;
 import com.fastcampus.baseballmanagement.player.type.Position;
@@ -7,6 +7,7 @@ import lombok.ToString;
 
 import java.sql.Timestamp;
 import java.util.List;
+
 
 public class OutPlayerList extends CustomResponse<List<OutPlayerList.OutPlayer>> {
 

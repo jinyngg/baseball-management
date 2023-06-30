@@ -1,9 +1,9 @@
-package com.fastcampus.baseballmanagement.outPlayer.service.impl;
+package com.fastcampus.baseballmanagement.outplayer.service.impl;
 
 import com.fastcampus.baseballmanagement.core.annotation.MyRequestMapping;
-import com.fastcampus.baseballmanagement.outPlayer.service.OutPlayerService;
-import com.fastcampus.baseballmanagement.outPlayer.dto.OutPlayerList;
-import com.fastcampus.baseballmanagement.outPlayer.dto.OutPlayerRegistration;
+import com.fastcampus.baseballmanagement.outplayer.service.OutPlayerService;
+import com.fastcampus.baseballmanagement.outplayer.dto.OutPlayerList;
+import com.fastcampus.baseballmanagement.outplayer.dto.OutPlayerRegistration;
 
 public class OutPlayerServiceImpl implements OutPlayerService {
 
