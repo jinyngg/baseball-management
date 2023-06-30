@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class StadiumRegistration extends CustomResponse<Stadium> {
+public class StadiumRegistration extends CustomResponse<String> {
 
     @Builder
-    public StadiumRegistration(String message, Stadium data) {
+    public StadiumRegistration(String message, String data) {
         super(message, data);
     }
 

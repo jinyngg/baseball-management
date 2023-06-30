@@ -1,6 +1,7 @@
 package com.fastcampus.baseballmanagement.outplayer.service.impl;
 
 import com.fastcampus.baseballmanagement.config.DBConnection;
+import com.fastcampus.baseballmanagement.exception.OutPlayerException;
 import com.fastcampus.baseballmanagement.outplayer.dto.OutPlayerList;
 import com.fastcampus.baseballmanagement.outplayer.dto.OutPlayerRegistration;
 import com.fastcampus.baseballmanagement.player.type.Position;
@@ -8,6 +9,8 @@ import com.fastcampus.baseballmanagement.player.type.Position;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.fastcampus.baseballmanagement.exception.ErrorCode.*;
 
 public class OutPlayerDAO {
 
@@ -49,16 +52,23 @@ public class OutPlayerDAO {
                     " FROM player" +
                     " WHERE player_id = ?";
 
-    public OutPlayerRegistration registerOutPlayer(int playerId, String reason) {
+    private final String selectTeamByPlayerIdQuery =
+            "SELECT *" +
+                    " FROM out_player" +
+                    " WHERE player_id = ?";
+
+    public OutPlayerRegistration registerOutPlayer(int playerId, String reason) throws OutPlayerException {
+
+        if(!isPlayer(playerId)) {
+            throw new OutPlayerException(INVALID_PLAYER);
+        }
+        if(isRegistrationOutPlayer(playerId)) {
+            throw new OutPlayerException(INVALID_TEAM);
+        }
+
         try (PreparedStatement insertPreparedStatement = connection.prepareStatement(insertQuery);
              PreparedStatement updatePreparedStatement = connection.prepareStatement(updatePlayerQuery)
         ) {
-            if(!isPlayer(playerId))
-                return OutPlayerRegistration.builder()
-                        .message("등록되어 있지 않은 선수입니다.")
-                        .data(playerId)
-                        .build();
-
             connection.setAutoCommit(false);
 
             insertPreparedStatement.setInt(1, playerId);
@@ -72,26 +82,23 @@ public class OutPlayerDAO {
 
             return OutPlayerRegistration.builder()
                     .message("퇴출 등록에 성공하셨습니다.")
-                    .data(playerId)
+                    .data(reason)
                     .build();
 
         } catch (SQLException e) {
-            e.printStackTrace();
             try {
                 connection.rollback();
             } catch (SQLException ex) {
-                ex.printStackTrace();
+                throw new OutPlayerException(SQL_EXCEPTION);
             }
-            return OutPlayerRegistration.builder()
-                    .message("퇴출 등록에 실패하셨습니다.")
-                    .data(playerId)
-                    .build();
+            throw new OutPlayerException(SQL_EXCEPTION);
         }
     }
 
-    public OutPlayerList getOutPlayerList() {
+    public OutPlayerList getOutPlayerList() throws OutPlayerException {
         List<OutPlayerList.OutPlayer> outPlayers = new ArrayList<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement(selectOutPlayerListQuery)) {
+
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while(resultSet.next()) {
@@ -118,22 +125,27 @@ public class OutPlayerDAO {
                     .build();
 
         } catch (SQLException e) {
-            e.printStackTrace();
-            return OutPlayerList.builder()
-                    .message("목록 조회에 실패하셨습니다.")
-                    .data(outPlayers)
-                    .build();
+            throw new OutPlayerException(SQL_EXCEPTION);
         }
     }
 
-    private boolean isPlayer(int playerId) {
+    private boolean isPlayer(int playerId) throws OutPlayerException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(selectByPlayerIdQuery)) {
             preparedStatement.setInt(1, playerId);
             ResultSet resultSet = preparedStatement.executeQuery();
             return resultSet.next();
         } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            throw new OutPlayerException(SQL_EXCEPTION);
+        }
+    }
+
+    private boolean isRegistrationOutPlayer(int playerId) throws OutPlayerException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(selectTeamByPlayerIdQuery)) {
+            preparedStatement.setInt(1, playerId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return resultSet.next();
+        } catch (SQLException e) {
+            throw new OutPlayerException(SQL_EXCEPTION);
         }
     }
 }
