@@ -1,5 +1,8 @@
-package com.fastcampus.baseballmanagement.core.annotation;
+package com.fastcampus.baseballmanagement.config;
 
+import com.fastcampus.baseballmanagement.core.annotation.MyBean;
+import com.fastcampus.baseballmanagement.core.annotation.MyConfiguration;
+import com.fastcampus.baseballmanagement.exception.GlobalExceptionHandler;
 import com.fastcampus.baseballmanagement.outPlayer.service.OutPlayerService;
 import com.fastcampus.baseballmanagement.outPlayer.service.impl.OutPlayerServiceImpl;
 import com.fastcampus.baseballmanagement.player.service.PlayerService;
@@ -30,6 +33,11 @@ public class AppConfig {
     @MyBean
     public OutPlayerService outPlayerService() {
         return new OutPlayerServiceImpl();
+    }
+
+    @MyBean
+    public GlobalExceptionHandler globalExceptionHandler() {
+        return new GlobalExceptionHandler();
     }
 
 }

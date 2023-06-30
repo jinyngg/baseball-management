@@ -1,12 +1,15 @@
 package com.fastcampus.baseballmanagement.team.service.impl;
 
 import com.fastcampus.baseballmanagement.config.DBConnection;
+import com.fastcampus.baseballmanagement.exception.TeamException;
 import com.fastcampus.baseballmanagement.team.dto.TeamList;
 import com.fastcampus.baseballmanagement.team.dto.TeamRegistration;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.fastcampus.baseballmanagement.exception.ErrorCode.SQL_EXCEPTION;
 
 public class TeamDAO {
 
@@ -51,7 +54,7 @@ public class TeamDAO {
      * 2. rowsAffected -> message 관리
      * 3. 예외시에도 메세지 응답 처리
      */
-    public TeamRegistration registerTeam(String name, int stadiumId) {
+    public TeamRegistration registerTeam(String name, int stadiumId) throws TeamException {
         String message;
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
@@ -62,22 +65,20 @@ public class TeamDAO {
             message = (rowsAffected > 0) ? "팀 등록에 성공했습니다." : "팀 등록에 실패했습니다.";
 
         } catch (SQLException e) {
-            e.printStackTrace();
-            message = "팀 등록에 실패했습니다. (SQLException)";
+            throw new TeamException(SQL_EXCEPTION, e.getMessage());
         }
 
         return TeamRegistration.builder()
                 .message(message)
                 .data(name)
                 .build();
-
     }
 
     /** 전체 팀 목록
      * refactor(23.06.28)
      * 1. try-with-resources -> Statement 리소스 누수 방지
      * */
-    public TeamList getTeamList() {
+    public TeamList getTeamList() throws TeamException {
         List<TeamList.TeamStadium> teamStadiums = new ArrayList<>();
         String message;
 
@@ -104,8 +105,7 @@ public class TeamDAO {
 
             message = "팀 조회에 성공했습니다.";
         } catch (SQLException e) {
-            e.printStackTrace();
-            message = "팀 조회에 실패했습니다.";
+            throw new TeamException(SQL_EXCEPTION, e.getMessage());
         }
 
         return TeamList.builder()
