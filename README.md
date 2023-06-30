@@ -189,7 +189,7 @@ out_player에 퇴출 선수를 insert하고, player 테이블에서 해당 선�
 응답 : PositionRespDto 에 값을 담아서 콘솔에 출력합니다.
 ````
 
-![image](https://github.com/jinyngg/baseball-management/assets/96164211/c4afcde0-16d4-400a-84c6-df9ec0a3ff7d)
+![image](https://github.com/jinyngg/baseball-management/assets/96164211/207a2d03-d339-4adc-9e51-8b8a718e785b)
 
 ## 4️⃣ 응답형식
 
