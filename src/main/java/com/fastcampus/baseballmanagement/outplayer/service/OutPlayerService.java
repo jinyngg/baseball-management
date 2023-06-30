@@ -1,7 +1,7 @@
-package com.fastcampus.baseballmanagement.outPlayer.service;
+package com.fastcampus.baseballmanagement.outplayer.service;
 
-import com.fastcampus.baseballmanagement.outPlayer.dto.OutPlayerList;
-import com.fastcampus.baseballmanagement.outPlayer.dto.OutPlayerRegistration;
+import com.fastcampus.baseballmanagement.outplayer.dto.OutPlayerList;
+import com.fastcampus.baseballmanagement.outplayer.dto.OutPlayerRegistration;
 
 public interface OutPlayerService {
 
