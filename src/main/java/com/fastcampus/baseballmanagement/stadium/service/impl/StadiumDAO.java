@@ -1,12 +1,16 @@
 package com.fastcampus.baseballmanagement.stadium.service.impl;
 
 import com.fastcampus.baseballmanagement.config.DBConnection;
+import com.fastcampus.baseballmanagement.exception.StadiumException;
+import com.fastcampus.baseballmanagement.exception.TeamException;
 import com.fastcampus.baseballmanagement.stadium.dto.Stadium;
 import com.fastcampus.baseballmanagement.stadium.dto.StadiumRegistration;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.fastcampus.baseballmanagement.exception.ErrorCode.SQL_EXCEPTION;
 
 public class StadiumDAO {
 
@@ -38,36 +42,28 @@ public class StadiumDAO {
                     " FROM stadium"
             ;
 
-    public StadiumRegistration registerStadium(String name) {
+    public StadiumRegistration registerStadium(String name) throws StadiumException {
         StadiumRegistration response = null;
 
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(insertQuery);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
 
             preparedStatement.setString(1, name);
 
-            int rowsAffected = preparedStatement.executeUpdate();
-            if (rowsAffected > 0) {
-                System.out.println("경기장 등록 성공 : " + name);
-                response = new StadiumRegistration("경기장 등록에 성공했습니다.", null);
-            } else {
-                System.out.println("경기장 등록 실패");
-                response = new StadiumRegistration("경기장 등록에 실패했습니다.", null);
-            }
+            response = new StadiumRegistration("경기장 등록에 성공했습니다.", name);
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new StadiumException(SQL_EXCEPTION, name);
         }
 
         return response;
     }
 
-    public List<Stadium> getAllStadiums() {
+    public List<Stadium> getAllStadiums() throws StadiumException {
         List<Stadium> stadiums = new ArrayList<>();
 
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(selectAllQuery);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(selectAllQuery)) {
+
+            ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
                 int stadiumId = resultSet.getInt("stadium_id");
@@ -83,17 +79,10 @@ public class StadiumDAO {
                 stadiums.add(stadium);
             }
 
-            resultSet.close();
-            statement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new StadiumException(SQL_EXCEPTION);
         }
         return stadiums;
     }
-
-
-//    Stadium findById(int id);
-//    int delete(int id);
-//    int update(Stadium stadium);
 
 }
